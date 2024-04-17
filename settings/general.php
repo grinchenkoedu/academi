@@ -185,7 +185,7 @@ $temp->add($setting);
 $name = 'theme_academi/preset';
 $title = get_string('preset', 'theme_boost', null, true);
 $description = get_string('preset_desc', 'theme_boost', null, true);
-$default = 'academi';
+$default = 'default.scss';
 
 $context = context_system::instance();
 $fs = get_file_storage();
@@ -195,7 +195,7 @@ $choices = [];
 foreach ($files as $file) {
     $choices[$file->get_filename()] = $file->get_filename();
 }
-$choices['academi'] = 'Academi';
+$choices['default.scss'] = 'Academi';
 $choices['eguru'] = 'Eguru';
 $choices['klass'] = 'Klass';
 $choices['enlightlite'] = 'Enlightlite';

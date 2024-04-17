@@ -275,9 +275,10 @@ body:not(.pagelayout-maintenance) #page-wrapper {
     margin-top: 0;
     #page-header {
         display: block;
-        margin-top: 15px;
+        margin-top: 30px;
+        padding-top: 0;
         .d-flex {
-            margin-bottom: 10px;
+            // margin-bottom: 10px;
             .header-actions-container .simplesearchform .input-group .input-group-append button {
                 border-top-right-radius: 5px;
                 border-bottom-right-radius: 5px;
@@ -305,10 +306,6 @@ body:not(.pagelayout-maintenance) #page-wrapper {
         }
         .page-header-image {
             margin-top: 0;
-            img {
-                width: auto !important;
-                height: auto !important;
-            }
         }
     }
     #page-content .has-blocks .card.card-block .course-content .weeks li.section {
@@ -412,6 +409,12 @@ body:not(.pagelayout-maintenance) #page-wrapper {
     .dir-rtl .card.card-block .action-menu .menubar .dropdown .dropdown-menu {
         right: 0;
         left: auto;
+    }
+}
+
+@media (max-width: 450px) {
+    .secondary-navigation .moremenu .nav-tabs .dropdownmoremenu .dropdown-menu {
+        left: 0 !important;
     }
 }
 /* End of Page Content */
@@ -1193,7 +1196,7 @@ div.backup-section + form {
 #page.drawers {
     height: auto;
     padding: 0;
-    /* margin-top: 0; */
+    margin-top: 30px;
     .drawer-right-toggle {
         margin-right: 0;
     }
@@ -1299,11 +1302,11 @@ body:not(.pagelayout-frontpage) {
     }
 }
 
-@media (min-width: 576px) {
-    #page.drawers .main-inner {
-        margin-top: 0;
-    }
-}
+// @media (min-width: 576px) {
+//     #page.drawers .main-inner {
+//         margin-top: 0;
+//     }
+// }
 
 @media (max-width: 574px) {
     .boxwidthnormal {
@@ -1797,6 +1800,12 @@ body:not(.pagelayout-frontpage) {
     .drawer-left,
     .drawer-right {
         margin-top: 60px;
+    }
+}
+
+@media (max-width: 767px) {
+    [data-region=right-hand-drawer].drawer {
+        top: 60px;
     }
 }
 /* End of Drawer */

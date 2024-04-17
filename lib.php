@@ -250,7 +250,7 @@ function theme_academi_get_main_scss_content($theme) {
     $fs = get_file_storage();
 
     $context = \context_system::instance();
-    if ($filename == 'academi') {
+    if ($filename == 'default.scss') {
         $scss .= file_get_contents($CFG->dirroot . '/theme/academi/scss/preset/default.scss');
     } else if ($filename == 'eguru') {
         $scss .= file_get_contents($CFG->dirroot . '/theme/academi/scss/preset/eguru.scss');

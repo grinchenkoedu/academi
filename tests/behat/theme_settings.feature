@@ -1,4 +1,4 @@
-@javascript @theme_academi
+@theme @theme_academi
 
 Feature: Configuring the theme_academi for the "General" tab on the "Academi" theme setting page
 
@@ -154,7 +154,6 @@ In order to use the features
     # And I am on site homepage
     # And I follow "Log in"
 
-
   # @javascript
   # Scenario: Setting: Primary & Secondary color
   #   Given I am on site homepage
@@ -298,4 +297,4 @@ In order to use the features
   #     | s_theme_academi_socialmedia1_icon  |  #e84c3d  |
   #   And I press "Save changes"
   #   And I am on site homepage
-    # Then "//div[@id='marketingspot']/*[1][contains(@style, 'pluginfile.php/1/theme_academi/mspotmedia/mspot.png')]" "xpath_element" should exist
+  # Then "//div[@id='marketingspot']/*[1][contains(@style, 'pluginfile.php/1/theme_academi/mspotmedia/mspot.png')]" "xpath_element" should exist

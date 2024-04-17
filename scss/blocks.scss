@@ -109,11 +109,11 @@
     .calendar-controls {
         padding: 12px 0 24px;
         .previous {
-            font-family: $font_0;
-            font-weight: $font_weight;
             color: $color_storm_dust_approx;
             &:before {
                 content: "\f100";
+                font-family: $font_0;
+                font-weight: $font_weight;
             }
             .arrow {
                 display: inline-block;
@@ -122,11 +122,11 @@
             }
         }
         .next {
-            font-family: $font_0;
-            font-weight: $font_weight;
             color: $color_storm_dust_approx;
             &:after {
                 content: "\f101";
+                font-family: $font_0;
+                font-weight: $font_weight;
             }
             .arrow {
                 display: inline-block;

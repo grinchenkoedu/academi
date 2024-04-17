@@ -30,7 +30,6 @@
                     font-weight: $font_weight;
                     color: $white;
                     font-size: 24px;
-                    font-weight: normal;
                 }
                 span {
                     display: none;
@@ -429,8 +428,15 @@
     #header.moodle-based-header ~ .drawer-right {
         margin-top: 60px;
     }
-    .navbar .popover-region .popover-region-container {
+    #header.navbar .popover-region .popover-region-container {
         top: 2.9px;
+    }
+}
+
+@media (max-width: 480px) {
+    #header.navbar .popover-region .popover-region-container {
+        height: 500px;
+        top: 60px;
     }
 }
 
