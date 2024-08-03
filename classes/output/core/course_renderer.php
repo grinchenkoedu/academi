@@ -431,4 +431,9 @@ class course_renderer extends \core_course_renderer {
 
         return $content;
     }
+
+    protected function course_summary(\coursecat_helper $chelper, \core_course_list_element $course): string
+    {
+        return $course->summary ?? '';
+    }
 }

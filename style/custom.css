@@ -1,3 +1,94 @@
 /* Custom CSS Settings
 -------------------------*/
+.drawer.drawer-right {
+    width: 600px;
+    max-width: 600px;
+    right: calc(-600px + -10px);
+    z-index: 1050;
+    box-shadow: -2px 5px 5px rgba(0, 0, 0, .2);
+}
+
+.categoryitem > .gradeitemheader,
+.item > .gradeitemheader {
+    max-width: 70px;
+}
+
+.category > .gradeitemheader {
+    max-width: 280px;
+}
+
+.block.block_navigation .block_tree ul {
+    padding-inline-start: 20px;
+}
+
+.block_navigation .block_tree .depth_1>ul {
+    padding-inline-start: 0;
+}
+
+.course-content .topics .section.main .section li.activity {
+    padding-bottom: 2px;
+}
+
+.courseindex .courseindex-section .courseindex-sectioncontent .courseindex-item {
+    padding-left: 0.2rem;
+}
+.courseindex .courseindex-item {
+    padding: 0.2rem 0.2rem;
+}
+
+select[size], select[multiple] {
+    max-width: 600px;
+}
+
+.course_category_tree .coursebox .content {
+    min-height: 50px;
+}
+
+.block .card-body .content .mr-3 {
+    margin-right: 1rem !important;
+}
+
+.course_category_tree.frontpage-category-names .category>.info>.categoryname.aabtn a {
+    display: inline-block;
+    max-width:70%;
+}
+
+.course_category_tree.frontpage-category-names .category {
+    width: 45%;
+}
+
+@media (max-width: 600px) {
+    .drawer.drawer-right {
+        width: 100%;
+        max-width: 100%;
+    }
+
+    .header-main .navbar.navbar-light .primary-navigation .navigation .dropdown-menu .dropdown-menu {
+        position: absolute;
+        top: 35px;
+        right: -10px;
+        width: 375px;
+        overflow: hidden;
+    }
+
+    .moremenu .dropdownmoremenu>.dropdown-menu .dropdown-menu .dropdown-item {
+        white-space: normal;
+    }
+}
+
+@media (min-width: 768px) {
+    .activity-item:not(.activityinline) {
+        padding: 0.5rem;
+    }
+
+    .moremenu .nav.nav-tabs .nav-item {
+        display: table;
+    }
+
+    .moremenu .nav.nav-tabs .nav-item .nav-link {
+        display: table-cell;
+        vertical-align: middle;
+    }
+}
+
 [[setting:customcss]]

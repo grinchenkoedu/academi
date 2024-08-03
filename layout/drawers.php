@@ -26,15 +26,20 @@ defined('MOODLE_INTERNAL') || die();
 
 require_once(dirname(__FILE__) .'/includes/layoutdata.php');
 
-
 $pagesize = theme_academi_get_setting('pagesize');
+
 if ($pagesize == 'container') {
     $extraclasses[] = 'theme-container';
-} else if ($pagesize == 'default') {
+} elseif ($pagesize == 'default') {
     $extraclasses[] = 'default-container';
-} else if ($pagesize == 'custom') {
+} elseif ($pagesize == 'custom') {
     $extraclasses[] = 'custom-container';
 }
+
+if (in_array($PAGE->pagetype, ['question-edit', 'grade-report-grader-index'])) {
+    $extraclasses[] = 'pagelayout-standard';
+}
+
 $bodyattributes = $OUTPUT->body_attributes($extraclasses);
 $templatecontext += [
     'bodyattributes' => $bodyattributes,

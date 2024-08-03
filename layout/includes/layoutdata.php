@@ -40,10 +40,9 @@ $addblockbutton = $OUTPUT->addblockbutton();
 // Add block button in editing mode.
 $addblockbutton = $OUTPUT->addblockbutton();
 
-
 if (isloggedin()) {
-    $courseindexopen = (get_user_preferences('drawer-open-index', true) == true);
-    $blockdraweropen = (get_user_preferences('drawer-open-block') == true);
+    $courseindexopen = (get_user_preferences('drawer-open-index', false) == true);
+    $blockdraweropen = (get_user_preferences('drawer-open-block', false) == true);
 } else {
     $courseindexopen = false;
     $blockdraweropen = false;
