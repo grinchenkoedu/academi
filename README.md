@@ -9,3 +9,6 @@ Fork of the original Academi 4.3 theme customized for a specific moodle installa
 * Tests edit page layout changed for better usability
 * Formatted course summary replaced with original
 * Other minor style fixes
+
+## Documentation
+* [Breadcrumb Customization](docs/breadcrumb_customization.md)
