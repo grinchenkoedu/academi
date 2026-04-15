@@ -56,42 +56,25 @@ class core_renderer extends \theme_boost\output\core_renderer {
     }
 
     /**
-     * Renders the navbar.
-     *
+     * Custom menu in header.
+     * @param custom_menu $menu
      * @return string
      */
-    public function navbar(): string {
-        $boostnavbar = new \theme_boost\boostnavbar($this->page);
-        $items = $boostnavbar->get_items();
+    public function custom_menu_render(custom_menu $menu) {
+        global $CFG;
 
-        $filtereditems = [];
-        $coursefound = false;
-        foreach ($items as $item) {
-            if ($item->type === \navigation_node::TYPE_COURSE) {
-                $coursefound = true;
-                if (!empty($item->shorttext)) {
-                    $item->text = $item->shorttext;
-                }
-            }
-            if ($coursefound) {
-                $filtereditems[] = $item;
-            }
+        $langs = get_string_manager()->get_list_of_translations();
+        $haslangmenu = $this->lang_menu() != '';
+
+        if (!$menu->has_children() && !$haslangmenu) {
+            return '';
         }
 
-        if (empty($filtereditems)) {
-            $filtereditems = $items;
+        $content = '';
+        foreach ($menu->get_children() as $item) {
+            $context = $item->export_for_template($this);
+            $content .= $this->render_from_template('theme_academi/custom_menu_item', $context);
         }
-
-        // Ensure the last item is not a link (this fixes the gray color issue).
-        if (!empty($filtereditems)) {
-            $lastitem = end($filtereditems);
-            $lastitem->action = null;
-            if (!$lastitem->is_last()) {
-                $lastitem->set_last(true);
-            }
-            reset($filtereditems);
-        }
-
-        return $this->render_from_template('core/navbar', (object) ['get_items' => array_values($filtereditems)]);
+        return $content;
     }
 }
