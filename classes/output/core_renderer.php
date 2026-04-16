@@ -25,8 +25,9 @@
 
 namespace theme_academi\output;
 
+use html_writer;
 use moodle_url;
-use core_course_category;
+use custom_menu;
 
 /**
  * The core course renderer.
@@ -34,146 +35,122 @@ use core_course_category;
  * Can be retrieved with the following:
  * $renderer = $PAGE->get_renderer('core','course');
  */
-class core_renderer extends \theme_boost\output\core_renderer
-{
+class core_renderer extends \theme_boost\output\core_renderer {
+
     /**
      * Returns the moodle_url for the favicon.
      *
      * This renderer function is copied and modified from /lib/outputrenderers.php
      *
-     * @return moodle_url The moodle_url for the favicon
      * @since Moodle 2.5.1 2.6
+     * @return moodle_url The moodle_url for the favicon
      */
-    public function favicon()
-    {
+    public function favicon() {
+        $logo = $this->image_url('favicon', 'theme');
         if (!empty($this->page->theme->settings->favicon)) {
-            return $this->page->theme->setting_file_url('favicon', 'favicon');
+            $logo = $this->page->theme->setting_file_url('favicon', 'favicon');
+        } else {
+            $logo = parent::favicon();
         }
-
-        return parent::favicon();
+        return $logo;
     }
 
-    public function navbar(): string
-    {
-        return $this->render_from_template('theme_academi/breadcrumbs', [
-            'list' => $this->get_breadcrumb_list()
-        ]);
-    }
+    /**
+     * Renders the navbar.
+     *
+     * @return string
+     */
+    
+    public function navbar(): string {
+    return $this->render_from_template('theme_academi/breadcrumbs', [
+        'list' => $this->get_breadcrumb_list()
+    ]);
+}
 
-    private function get_breadcrumb_list(): array
-    {
-        $page = $this->page;
-        $items = [$this->build_home_item()];
+private function get_breadcrumb_list(): array {
+    global $PAGE;
 
-        $navitems = $page->navbar->get_items();
+    $items = [];
 
-        // Standard breadcrumb for non-course pages.
-        if (count($navitems) > 1 && strpos($page->pagetype, 'course-view') !== 0) {
-            $items = array_merge($items, $this->build_standard_nav_items($navitems));
-            return $this->wrap_single_breadcrumb_trail($items);
-        }
+    // --- Home ---
+    $items[] = [
+        'text' => get_string('home'),
+        'url'  => (new \moodle_url('/'))->out(false)
+    ];
 
-        // Course view breadcrumb: home > courses > categories > current course.
-        if (strpos($page->pagetype, 'course-view') === 0 && !empty($page->course->id)) {
-            $items = array_merge($items, $this->build_course_view_items($page->course));
-            return $this->wrap_single_breadcrumb_trail($items);
-        }
+    $navitems = $PAGE->navbar->get_items();
 
-        return $this->wrap_single_breadcrumb_trail($items);
-    }
+    // --- 1. стандартный breadcrumb ---
+    if (count($navitems) > 1 && strpos($PAGE->pagetype, 'course-view') !== 0) {
 
-    private function build_home_item(): array
-    {
-        return [
-            'text' => get_string('home'),
-            'url' => (new moodle_url('/'))->out(false)
-        ];
-    }
-
-    private function build_standard_nav_items(array $navitems): array
-    {
-        $items = [];
-
-        // The first navbar item is Home; skip it because we already prepend our own Home item.
         array_shift($navitems);
 
         foreach ($navitems as $item) {
             $items[] = [
                 'text' => $item->text,
-                'url' => $item->action ? $item->action->out(false) : null
+                'url'  => $item->action ? $item->action->out(false) : null
             ];
         }
 
-        $this->make_last_item_non_clickable($items);
-
-        return $items;
+        return [['items' => $items]];
     }
 
-    private function build_course_view_items(\stdClass $course): array
-    {
-        $items = [
-            [
-                'text' => get_string('courses'),
-                'url' => (new moodle_url('/course/index.php'))->out(false)
-            ]
+    // --- 2. COURSE VIEW ---
+    if (strpos($PAGE->pagetype, 'course-view') === 0 && !empty($PAGE->course->id)) {
+
+        $course = $PAGE->course;
+
+        // --- категории ---
+        $items[] = [
+            'text' => get_string('courses'),
+            'url'  => (new \moodle_url('/course/index.php'))->out(false)
         ];
 
         if (!empty($course->category)) {
-            $items = array_merge($items, $this->build_category_items_from_id((int)$course->category));
+            $cat = \core_course_category::get($course->category);
+
+            $cats = $cat->get_parents();
+            $cats[] = $cat;
+
+            foreach ($cats as $c) {
+                $items[] = [
+                    'text' => $c->name??$c,
+                    'url'  => (new \moodle_url('/course/index.php', [
+                        'categoryid' => $c->id??$c
+                    ]))->out(false)
+                ];
+            }
         }
 
         $items[] = [
             'text' => $course->fullname,
-            'url' => null
+            'url'  => null
         ];
 
-        return $items;
-    }
+        // --- отдельная линия My courses ---
+        $my = [];
 
-    private function build_category_items_from_id(int $categoryid): array
-    {
-        $items = [];
-        $category = core_course_category::get($categoryid);
+        $my[] = [
+            'text' => get_string('home'),
+            'url'  => (new \moodle_url('/'))->out(false)
+        ];
 
-        // get_parents() returns IDs, so resolve each one to display readable category names.
-        foreach ($category->get_parents() as $parentid) {
-            $items[] = $this->build_category_item((int)$parentid);
-        }
+        $my[] = [
+            'text' => get_string('mycourses'),
+            'url'  => (new \moodle_url('/my/courses.php'))->out(false)
+        ];
 
-        $items[] = $this->build_category_item($category->id, $category->name);
-
-        return $items;
-    }
-
-    private function build_category_item(int $categoryid, $name = null): array
-    {
-        if ($name === null) {
-            try {
-                $resolvedcategory = core_course_category::get($categoryid);
-                $name = $resolvedcategory->name;
-            } catch (\Exception $exception) {
-                $name = (string)$categoryid;
-            }
-        }
+        $my[] = [
+            'text' => $course->fullname,
+            'url'  => null
+        ];
 
         return [
-            'text' => $name,
-            'url' => (new moodle_url('/course/index.php', [
-                'categoryid' => $categoryid
-            ]))->out(false)
+            ['items' => $items],
+            ['items' => $my]
         ];
     }
 
-    private function make_last_item_non_clickable(array &$items)
-    {
-        $lastitemindex = count($items) - 1;
-        if ($lastitemindex >= 0) {
-            $items[$lastitemindex]['url'] = null;
-        }
-    }
-
-    private function wrap_single_breadcrumb_trail(array $items): array
-    {
-        return [['items' => $items]];
-    }
-}
+    // --- fallback ---
+    return [['items' => $items]];
+}}

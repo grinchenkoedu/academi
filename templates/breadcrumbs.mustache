@@ -14,16 +14,16 @@
     You should have received a copy of the GNU General Public License
     along with Moodle.  If not, see <http://www.gnu.org/licenses/>.
 }}
-<nav aria-label="breadcrumb">
+<nav>
     {{#list}}
         <ol class="breadcrumb">
             {{#items}}
-                <li class="breadcrumb-item{{^url}} active{{/url}}">
+                <li class="breadcrumb-item">
                     {{#url}}
                         <a href="{{url}}">{{text}}</a>
                     {{/url}}
                     {{^url}}
-                        <span aria-current="page">{{text}}</span>
+                        <span>{{text}}</span>
                     {{/url}}
                 </li>
             {{/items}}
