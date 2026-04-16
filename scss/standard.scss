@@ -1217,12 +1217,12 @@ div.backup-section + form {
     display: none;
 }
 .theme-container #page.drawers .main-inner {
-    max-width: $modal-xl;
+    max-width: 960px;
     margin-left: auto;
     margin-right: auto;
 }
 .default-container #page.drawers .main-inner {
-    max-width: $course-content-maxwidth;
+    max-width: 960px;
     margin-left: auto;
     margin-right: auto;
 }
@@ -1233,26 +1233,38 @@ div.backup-section + form {
 }
 body:not(.pagelayout-frontpage) {
     &.theme-container.limitedwidth #page.drawers {
-        .main-inner,
+        .main-inner {
+            max-width: 960px;
+            margin-left: auto;
+            margin-right: auto;
+        }
         .secondary-navigation {
-            max-width: $modal-xl;
+            max-width: 960px;
             margin-left: auto;
             margin-right: auto;
         }
     }
     &.default-container.limitedwidth #page.drawers {
-        .main-inner,
+        .main-inner {
+            max-width: 960px;
+            margin-left: auto;
+            margin-right: auto;
+        }
         .secondary-navigation {
-            max-width: $course-content-maxwidth;
+            max-width: 960px;
             margin-left: auto;
             margin-right: auto;
         }
 
     }
     &.custom-container.limitedwidth #page.drawers {
-        .main-inner,
+        .main-inner {
+            max-width: 960px;
+            margin-left: auto;
+            margin-right: auto;
+        }
         .secondary-navigation {
-            max-width: $custom-container;
+            max-width: 960px;
             margin-left: auto;
             margin-right: auto;
         }
@@ -1274,12 +1286,14 @@ body:not(.pagelayout-frontpage) {
 @media (min-width: 768px) {
     #page.drawers .main-inner {
         padding: 0;
-        .header-maxwidth,
-        .secondary-navigation {
+        .header-maxwidth {
             max-width: none;
             padding: 10px 30px;
+        }
+        .secondary-navigation {
+            padding: 10px 30px;
             .navigation {
-                max-width: none;
+                max-width: 960px;
                 margin: 0 auto;
                 border: 0;
             }

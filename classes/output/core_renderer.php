@@ -56,8 +56,8 @@ class core_renderer extends \theme_boost\output\core_renderer {
     }
 
     /**
-     * Renders the navbar.
-     *
+     * Custom menu in header.
+     * @param custom_menu $menu
      * @return string
      */
     
