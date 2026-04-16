@@ -18,12 +18,12 @@
     {{#list}}
         <ol class="breadcrumb">
             {{#items}}
-                <li class="breadcrumb-item">
+                <li class="breadcrumb-item{{^url}} active{{/url}}">
                     {{#url}}
                         <a href="{{url}}">{{text}}</a>
                     {{/url}}
                     {{^url}}
-                        <span>{{text}}</span>
+                        <span aria-current="page">{{text}}</span>
                     {{/url}}
                 </li>
             {{/items}}
