@@ -60,38 +60,97 @@ class core_renderer extends \theme_boost\output\core_renderer {
      *
      * @return string
      */
+    
     public function navbar(): string {
-        $boostnavbar = new \theme_boost\boostnavbar($this->page);
-        $items = $boostnavbar->get_items();
-
-        $filtereditems = [];
-        $coursefound = false;
-        foreach ($items as $item) {
-            if ($item->type === \navigation_node::TYPE_COURSE) {
-                $coursefound = true;
-                if (!empty($item->shorttext)) {
-                    $item->text = $item->shorttext;
-                }
-            }
-            if ($coursefound) {
-                $filtereditems[] = $item;
-            }
-        }
-
-        if (empty($filtereditems)) {
-            $filtereditems = $items;
-        }
-
-        // Ensure the last item is not a link (this fixes the gray color issue).
-        if (!empty($filtereditems)) {
-            $lastitem = end($filtereditems);
-            $lastitem->action = null;
-            if (!$lastitem->is_last()) {
-                $lastitem->set_last(true);
-            }
-            reset($filtereditems);
-        }
-
-        return $this->render_from_template('core/navbar', (object) ['get_items' => array_values($filtereditems)]);
-    }
+    return $this->render_from_template('theme_academi/breadcrumbs', [
+        'list' => $this->get_breadcrumb_list()
+    ]);
 }
+
+private function get_breadcrumb_list(): array {
+    global $PAGE;
+
+    $items = [];
+
+    // --- Home ---
+    $items[] = [
+        'text' => get_string('home'),
+        'url'  => (new \moodle_url('/'))->out(false)
+    ];
+
+    $navitems = $PAGE->navbar->get_items();
+
+    // --- 1. стандартный breadcrumb ---
+    if (count($navitems) > 1 && strpos($PAGE->pagetype, 'course-view') !== 0) {
+
+        array_shift($navitems);
+
+        foreach ($navitems as $item) {
+            $items[] = [
+                'text' => $item->text,
+                'url'  => $item->action ? $item->action->out(false) : null
+            ];
+        }
+
+        return [['items' => $items]];
+    }
+
+    // --- 2. COURSE VIEW ---
+    if (strpos($PAGE->pagetype, 'course-view') === 0 && !empty($PAGE->course->id)) {
+
+        $course = $PAGE->course;
+
+        // --- категории ---
+        $items[] = [
+            'text' => get_string('courses'),
+            'url'  => (new \moodle_url('/course/index.php'))->out(false)
+        ];
+
+        if (!empty($course->category)) {
+            $cat = \core_course_category::get($course->category);
+
+            $cats = $cat->get_parents();
+            $cats[] = $cat;
+
+            foreach ($cats as $c) {
+                $items[] = [
+                    'text' => $c->name??$c,
+                    'url'  => (new \moodle_url('/course/index.php', [
+                        'categoryid' => $c->id??$c
+                    ]))->out(false)
+                ];
+            }
+        }
+
+        $items[] = [
+            'text' => $course->fullname,
+            'url'  => null
+        ];
+
+        // --- отдельная линия My courses ---
+        $my = [];
+
+        $my[] = [
+            'text' => get_string('home'),
+            'url'  => (new \moodle_url('/'))->out(false)
+        ];
+
+        $my[] = [
+            'text' => get_string('mycourses'),
+            'url'  => (new \moodle_url('/my/courses.php'))->out(false)
+        ];
+
+        $my[] = [
+            'text' => $course->fullname,
+            'url'  => null
+        ];
+
+        return [
+            ['items' => $items],
+            ['items' => $my]
+        ];
+    }
+
+    // --- fallback ---
+    return [['items' => $items]];
+}}
