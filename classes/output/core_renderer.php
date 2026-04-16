@@ -46,20 +46,13 @@ class core_renderer extends \theme_boost\output\core_renderer
      */
     public function favicon()
     {
-        $logo = $this->image_url('favicon', 'theme');
         if (!empty($this->page->theme->settings->favicon)) {
-            $logo = $this->page->theme->setting_file_url('favicon', 'favicon');
-        } else {
-            $logo = parent::favicon();
+            return $this->page->theme->setting_file_url('favicon', 'favicon');
         }
-        return $logo;
+
+        return parent::favicon();
     }
 
-    /**
-     * Renders the navbar.
-     *
-     * @return string
-     */
     public function navbar(): string
     {
         return $this->render_from_template('theme_academi/breadcrumbs', [
@@ -102,12 +95,12 @@ class core_renderer extends \theme_boost\output\core_renderer
             return [['items' => $items]];
         }
 
-        // --- 2. COURSE VIEW ---
+        // --- 2. Course view ---
         if (strpos($page->pagetype, 'course-view') === 0 && !empty($page->course->id)) {
 
             $course = $page->course;
 
-            // --- categories ---
+            // Build a single category-based trail for course pages.
             $items[] = [
                 'text' => get_string('courses'),
                 'url' => (new moodle_url('/course/index.php'))->out(false)
@@ -134,28 +127,7 @@ class core_renderer extends \theme_boost\output\core_renderer
                 'url' => null
             ];
 
-            // --- separate My courses line ---
-            $my = [];
-
-            $my[] = [
-                'text' => get_string('home'),
-                'url' => (new moodle_url('/'))->out(false)
-            ];
-
-            $my[] = [
-                'text' => get_string('mycourses'),
-                'url' => (new moodle_url('/my/courses.php'))->out(false)
-            ];
-
-            $my[] = [
-                'text' => $course->fullname,
-                'url' => null
-            ];
-
-            return [
-                ['items' => $items],
-                ['items' => $my]
-            ];
+            return [['items' => $items]];
         }
 
         // --- fallback ---
