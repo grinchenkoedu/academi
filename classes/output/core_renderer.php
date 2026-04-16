@@ -110,7 +110,7 @@ class core_renderer extends \theme_boost\output\core_renderer
             // --- categories ---
             $items[] = [
                 'text' => get_string('courses'),
-                'url' => (new \moodle_url('/course/index.php'))->out(false)
+                'url' => (new moodle_url('/course/index.php'))->out(false)
             ];
 
             if (!empty($course->category)) {
@@ -122,7 +122,7 @@ class core_renderer extends \theme_boost\output\core_renderer
                 foreach ($cats as $c) {
                     $items[] = [
                         'text' => $c->name ?? $c,
-                        'url' => (new \moodle_url('/course/index.php', [
+                        'url' => (new moodle_url('/course/index.php', [
                             'categoryid' => $c->id ?? $c
                         ]))->out(false)
                     ];
@@ -139,12 +139,12 @@ class core_renderer extends \theme_boost\output\core_renderer
 
             $my[] = [
                 'text' => get_string('home'),
-                'url' => (new \moodle_url('/'))->out(false)
+                'url' => (new moodle_url('/'))->out(false)
             ];
 
             $my[] = [
                 'text' => get_string('mycourses'),
-                'url' => (new \moodle_url('/my/courses.php'))->out(false)
+                'url' => (new moodle_url('/my/courses.php'))->out(false)
             ];
 
             $my[] = [
