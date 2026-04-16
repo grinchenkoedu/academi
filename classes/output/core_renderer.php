@@ -25,7 +25,6 @@
 
 namespace theme_academi\output;
 
-use html_writer;
 use moodle_url;
 use custom_menu;
 
@@ -35,17 +34,18 @@ use custom_menu;
  * Can be retrieved with the following:
  * $renderer = $PAGE->get_renderer('core','course');
  */
-class core_renderer extends \theme_boost\output\core_renderer {
-
+class core_renderer extends \theme_boost\output\core_renderer
+{
     /**
      * Returns the moodle_url for the favicon.
      *
      * This renderer function is copied and modified from /lib/outputrenderers.php
      *
-     * @since Moodle 2.5.1 2.6
      * @return moodle_url The moodle_url for the favicon
+     * @since Moodle 2.5.1 2.6
      */
-    public function favicon() {
+    public function favicon()
+    {
         $logo = $this->image_url('favicon', 'theme');
         if (!empty($this->page->theme->settings->favicon)) {
             $logo = $this->page->theme->setting_file_url('favicon', 'favicon');
@@ -60,97 +60,105 @@ class core_renderer extends \theme_boost\output\core_renderer {
      * @param custom_menu $menu
      * @return string
      */
-    
-    public function navbar(): string {
-    return $this->render_from_template('theme_academi/breadcrumbs', [
-        'list' => $this->get_breadcrumb_list()
-    ]);
-}
+    public function navbar(): string
+    {
+        return $this->render_from_template('theme_academi/breadcrumbs', [
+            'list' => $this->get_breadcrumb_list()
+        ]);
+    }
 
-private function get_breadcrumb_list(): array {
-    global $PAGE;
+    private function get_breadcrumb_list(): array
+    {
+        $page = $this->page;
 
-    $items = [];
+        $items = [];
 
-    // --- Home ---
-    $items[] = [
-        'text' => get_string('home'),
-        'url'  => (new \moodle_url('/'))->out(false)
-    ];
+        // --- Home ---
+        $items[] = [
+            'text' => get_string('home'),
+            'url' => (new moodle_url('/'))->out(false)
+        ];
 
-    $navitems = $PAGE->navbar->get_items();
+        $navitems = $page->navbar->get_items();
 
-    // --- 1. стандартный breadcrumb ---
-    if (count($navitems) > 1 && strpos($PAGE->pagetype, 'course-view') !== 0) {
+        // --- 1. standard breadcrumb ---
+        if (count($navitems) > 1 && strpos($page->pagetype, 'course-view') !== 0) {
 
-        array_shift($navitems);
+            array_shift($navitems);
 
-        foreach ($navitems as $item) {
+            foreach ($navitems as $item) {
+                $items[] = [
+                    'text' => $item->text,
+                    'url' => $item->action ? $item->action->out(false) : null
+                ];
+            }
+
+            // Keep the current page breadcrumb non-clickable for consistent UX/styling.
+            $lastitemindex = count($items) - 1;
+            if ($lastitemindex >= 0) {
+                $items[$lastitemindex]['url'] = null;
+            }
+
+            return [['items' => $items]];
+        }
+
+        // --- 2. COURSE VIEW ---
+        if (strpos($page->pagetype, 'course-view') === 0 && !empty($page->course->id)) {
+
+            $course = $page->course;
+
+            // --- categories ---
             $items[] = [
-                'text' => $item->text,
-                'url'  => $item->action ? $item->action->out(false) : null
+                'text' => get_string('courses'),
+                'url' => (new \moodle_url('/course/index.php'))->out(false)
+            ];
+
+            if (!empty($course->category)) {
+                $cat = \core_course_category::get($course->category);
+
+                $cats = $cat->get_parents();
+                $cats[] = $cat;
+
+                foreach ($cats as $c) {
+                    $items[] = [
+                        'text' => $c->name ?? $c,
+                        'url' => (new \moodle_url('/course/index.php', [
+                            'categoryid' => $c->id ?? $c
+                        ]))->out(false)
+                    ];
+                }
+            }
+
+            $items[] = [
+                'text' => $course->fullname,
+                'url' => null
+            ];
+
+            // --- separate My courses line ---
+            $my = [];
+
+            $my[] = [
+                'text' => get_string('home'),
+                'url' => (new \moodle_url('/'))->out(false)
+            ];
+
+            $my[] = [
+                'text' => get_string('mycourses'),
+                'url' => (new \moodle_url('/my/courses.php'))->out(false)
+            ];
+
+            $my[] = [
+                'text' => $course->fullname,
+                'url' => null
+            ];
+
+            return [
+                ['items' => $items],
+                ['items' => $my]
             ];
         }
 
+        // --- fallback ---
         return [['items' => $items]];
     }
-
-    // --- 2. COURSE VIEW ---
-    if (strpos($PAGE->pagetype, 'course-view') === 0 && !empty($PAGE->course->id)) {
-
-        $course = $PAGE->course;
-
-        // --- категории ---
-        $items[] = [
-            'text' => get_string('courses'),
-            'url'  => (new \moodle_url('/course/index.php'))->out(false)
-        ];
-
-        if (!empty($course->category)) {
-            $cat = \core_course_category::get($course->category);
-
-            $cats = $cat->get_parents();
-            $cats[] = $cat;
-
-            foreach ($cats as $c) {
-                $items[] = [
-                    'text' => $c->name??$c,
-                    'url'  => (new \moodle_url('/course/index.php', [
-                        'categoryid' => $c->id??$c
-                    ]))->out(false)
-                ];
-            }
-        }
-
-        $items[] = [
-            'text' => $course->fullname,
-            'url'  => null
-        ];
-
-        // --- отдельная линия My courses ---
-        $my = [];
-
-        $my[] = [
-            'text' => get_string('home'),
-            'url'  => (new \moodle_url('/'))->out(false)
-        ];
-
-        $my[] = [
-            'text' => get_string('mycourses'),
-            'url'  => (new \moodle_url('/my/courses.php'))->out(false)
-        ];
-
-        $my[] = [
-            'text' => $course->fullname,
-            'url'  => null
-        ];
-
-        return [
-            ['items' => $items],
-            ['items' => $my]
-        ];
-    }
-
-    // --- fallback ---
-    return [['items' => $items]];
-}}
+}
