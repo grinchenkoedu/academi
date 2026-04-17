@@ -1130,7 +1130,7 @@ div.backup-section + form {
         position: relative;
         &::before{display: none;}
         &:nth-child(2n){
-            background-color: color-mix(in srgb, $color_gallery_approx 85%, $primary 15%);
+            background-color: mix($primary, $color_gallery_approx, 15%);
         }
         a {
             color: $grey;
