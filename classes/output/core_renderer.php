@@ -57,7 +57,7 @@ class core_renderer extends \theme_boost\output\core_renderer
     {
         $items = $this->get_breadcrumb_list();
         $this->make_last_item_non_clickable($items);
-        return $this->render_from_template('theme_academi/breadcrumbs', ['items' =>  $items]);
+        return $this->render_from_template('theme_academi/breadcrumbs', ['items' => $items]);
     }
 
     private function get_breadcrumb_list(): array

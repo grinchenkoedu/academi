@@ -1148,10 +1148,12 @@ div.backup-section + form {
             color: $white;
             background: $primary;
         }
-        &:nth-child(2n) {
+        &:nth-child(2n):not(:last-child) {
             background-color: mix($primary, $color_gallery_approx, 15%);
         }
-        + .breadcrumb-item::before{display: none;}
+        + .breadcrumb-item::before{
+            display: none;
+        }
     }
 }
 /* End of Breadcrumb */
