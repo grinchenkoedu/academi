@@ -1128,10 +1128,11 @@ div.backup-section + form {
         padding: 5px 15px;
         float: left;
         position: relative;
-        &::before{display: none;}
-        &:nth-child(2n){
-            background-color: mix($primary, $color_gallery_approx, 15%);
-        }
+        padding-inline: 1em;
+        overflow: visible;
+        width: fit-content;
+        margin-right: -.4em;
+        clip-path: polygon(0 0, calc(100% - 10px) 0, 100% 50%, calc(100% - 10px) 100%, 0 100%, 10px 50%);
         a {
             color: $grey;
             &:hover,
@@ -1810,3 +1811,4 @@ body:not(.pagelayout-frontpage) {
     }
 }
 /* End of Drawer */
+
