@@ -73,7 +73,7 @@ class core_renderer extends \theme_boost\output\core_renderer
             return $items;
         }
 
-        // Course view breadcrumb: home > courses > categories > current course.
+        // Course view breadcrumb: home > courses > mycourses > categories > current course.
         if (strpos($page->pagetype, 'course-view') === 0 && !empty($page->course->id)) {
             $items = array_merge($items, $this->build_course_view_items($page->course));
             return $items;
