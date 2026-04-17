@@ -55,9 +55,9 @@ class core_renderer extends \theme_boost\output\core_renderer
 
     public function navbar(): string
     {
-        return $this->render_from_template('theme_academi/breadcrumbs', [
-            'list' => $this->get_breadcrumb_list()
-        ]);
+        $items = $this->get_breadcrumb_list();
+        $this->make_last_item_non_clickable($items);
+        return $this->render_from_template('theme_academi/breadcrumbs', ['items' =>  $items]);
     }
 
     private function get_breadcrumb_list(): array
@@ -70,16 +70,16 @@ class core_renderer extends \theme_boost\output\core_renderer
         // Standard breadcrumb for non-course pages.
         if (count($navitems) > 1 && strpos($page->pagetype, 'course-view') !== 0) {
             $items = array_merge($items, $this->build_standard_nav_items($navitems));
-            return $this->wrap_single_breadcrumb_trail($items);
+            return $items;
         }
 
         // Course view breadcrumb: home > courses > categories > current course.
         if (strpos($page->pagetype, 'course-view') === 0 && !empty($page->course->id)) {
             $items = array_merge($items, $this->build_course_view_items($page->course));
-            return $this->wrap_single_breadcrumb_trail($items);
+            return $items;
         }
 
-        return $this->wrap_single_breadcrumb_trail($items);
+        return $items;
     }
 
     private function build_home_item(): array
@@ -104,8 +104,6 @@ class core_renderer extends \theme_boost\output\core_renderer
             ];
         }
 
-        $this->make_last_item_non_clickable($items);
-
         return $items;
     }
 
@@ -115,6 +113,10 @@ class core_renderer extends \theme_boost\output\core_renderer
             [
                 'text' => get_string('courses'),
                 'url' => (new moodle_url('/course/index.php'))->out(false)
+            ],
+            [
+                'text' => get_string('mycourses'),
+                'url' => (new moodle_url('/my/courses.php'))->out(false)
             ]
         ];
 
@@ -170,10 +172,5 @@ class core_renderer extends \theme_boost\output\core_renderer
         if ($lastitemindex >= 0) {
             $items[$lastitemindex]['url'] = null;
         }
-    }
-
-    private function wrap_single_breadcrumb_trail(array $items): array
-    {
-        return [['items' => $items]];
     }
 }

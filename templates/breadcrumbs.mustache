@@ -15,18 +15,16 @@
     along with Moodle.  If not, see <http://www.gnu.org/licenses/>.
 }}
 <nav aria-label="breadcrumb">
-    {{#list}}
-        <ol class="breadcrumb">
-            {{#items}}
-                <li class="breadcrumb-item{{^url}} active{{/url}}">
-                    {{#url}}
-                        <a href="{{url}}">{{text}}</a>
-                    {{/url}}
-                    {{^url}}
-                        <span aria-current="page">{{text}}</span>
-                    {{/url}}
-                </li>
-            {{/items}}
-        </ol>
-    {{/list}}
+    <ol class="breadcrumb">
+        {{#items}}
+            <li class="breadcrumb-item{{^url}} active{{/url}}">
+                {{#url}}
+                    <a href="{{url}}">{{text}}</a>
+                {{/url}}
+                {{^url}}
+                    <span aria-current="page">{{text}}</span>
+                {{/url}}
+            </li>
+        {{/items}}
+    </ol>
 </nav>

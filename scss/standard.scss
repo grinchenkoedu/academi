@@ -1128,6 +1128,10 @@ div.backup-section + form {
         padding: 5px 15px;
         float: left;
         position: relative;
+        &::before{display: none;}
+        &:nth-child(2n){
+            background-color: color-mix(in srgb, $color_gallery_approx 85%, $primary 15%);
+        }
         a {
             color: $grey;
             &:hover,
@@ -1142,31 +1146,17 @@ div.backup-section + form {
         }
     }
     .breadcrumb-item {
+        padding-inline: 1em;
+        overflow: visible;
+        width: fit-content;
+        margin-right: -.4em;
+        clip-path: polygon(0 0, calc(100% - 10px) 0, 100% 50%, calc(100% - 10px) 100%, 0 100%, 10px 50%);
+        &:first-child {
+            clip-path: polygon(0 0, calc(100% - 10px) 0, 100% 50%, calc(100% - 10px) 100%, 0 100%);
+        }
         &:last-child {
             color: $white;
-            padding-left: 15px;
-            padding-right: 10px;
             background: $primary;
-            &:before {
-                display: none;
-            }
-            &:after {
-                content: '';
-                width: 0;
-                height: 0;
-                border-top: 18px solid transparent;
-                border-bottom: 15px solid transparent;
-                border-left: 20px solid $primary;
-                position: absolute;
-                right: -20px;
-                top: 0;
-            }
-        }
-        + .breadcrumb-item:before {
-            content: '\f105';
-            font-family: $font_0;
-            font-weight: $font_weight;
-            margin-right: 10px;
         }
     }
 }
@@ -1239,7 +1229,6 @@ body:not(.pagelayout-frontpage) {
             margin-right: auto;
         }
         .secondary-navigation {
-            max-width: 960px;
             margin-left: auto;
             margin-right: auto;
         }
@@ -1251,7 +1240,6 @@ body:not(.pagelayout-frontpage) {
             margin-right: auto;
         }
         .secondary-navigation {
-            max-width: 960px;
             margin-left: auto;
             margin-right: auto;
         }
@@ -1264,7 +1252,6 @@ body:not(.pagelayout-frontpage) {
             margin-right: auto;
         }
         .secondary-navigation {
-            max-width: 960px;
             margin-left: auto;
             margin-right: auto;
         }
@@ -1293,7 +1280,6 @@ body:not(.pagelayout-frontpage) {
         .secondary-navigation {
             padding: 10px 30px;
             .navigation {
-                max-width: 960px;
                 margin: 0 auto;
                 border: 0;
             }
@@ -1449,6 +1435,7 @@ body:not(.pagelayout-frontpage) {
 .moremenu {
     .nav.nav-tabs {
         border-bottom: 0;
+        max-width: none;
         .nav-item {
             margin-right: 1px;
             &:last-child {
