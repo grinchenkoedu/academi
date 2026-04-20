@@ -26,6 +26,7 @@
 namespace theme_academi\output;
 
 use moodle_url;
+use action_link;
 use core_course_category;
 
 /**
@@ -98,9 +99,16 @@ class core_renderer extends \theme_boost\output\core_renderer
         array_shift($navitems);
 
         foreach ($navitems as $item) {
+            $url = null;
+            if ($item->action instanceof moodle_url) {
+                $url = $item->action->out(false);
+            } else if ($item->action instanceof action_link) {
+                $url = $item->action->url->out(false);
+            }
+
             $items[] = [
                 'text' => $item->text,
-                'url' => $item->action ? $item->action->out(false) : null
+                'url' => $url
             ];
         }
 
