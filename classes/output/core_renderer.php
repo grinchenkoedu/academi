@@ -99,6 +99,11 @@ class core_renderer extends \theme_boost\output\core_renderer
         array_shift($navitems);
 
         foreach ($navitems as $item) {
+            $text = trim((string)$item->text);
+            if ($text === '') {
+                continue;
+            }
+
             $url = null;
             if ($item->action instanceof moodle_url) {
                 $url = $item->action->out(false);
@@ -107,7 +112,7 @@ class core_renderer extends \theme_boost\output\core_renderer
             }
 
             $items[] = [
-                'text' => $item->text,
+                'text' => $text,
                 'url' => $url
             ];
         }

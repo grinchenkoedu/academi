@@ -2119,21 +2119,18 @@ button.btn-footer-popover:active {
 .breadcrumb {
     background: none;
     border-radius: 0;
-    display: block;
     padding: 0;
 }
-.breadcrumb > li {
+.breadcrumb-item {
     color: var(--grey);
-    text-shadow: none;
-    display: inline-block;
     padding: 5px 15px;
     position: relative;
 }
-.breadcrumb > li a {
+.breadcrumb-item a {
     color: var(--grey);
 }
-.breadcrumb > li a:hover,
-.breadcrumb > li a:focus {
+.breadcrumb-item a:hover,
+.breadcrumb-item a:focus {
     color: var(--color_primary);
     text-decoration: none;
 }
@@ -2161,10 +2158,6 @@ button.btn-footer-popover:active {
     position: absolute;
     right: -20px;
     top: 0;
-}
-.breadcrumb > li > .divider {
-    font-size: 10px;
-    color: var(--color_primary);
 }
 
 /*Blocks*/
