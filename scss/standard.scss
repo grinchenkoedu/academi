@@ -1217,11 +1217,6 @@ div.backup-section + form {
 }
 body:not(.pagelayout-frontpage) {
     &.theme-container.limitedwidth #page.drawers {
-        .main-inner {
-            max-width: 1280px;
-            margin-left: auto;
-            margin-right: auto;
-        }
         .secondary-navigation {
             max-width: 960px;
             margin-left: auto;
@@ -1229,17 +1224,11 @@ body:not(.pagelayout-frontpage) {
         }
     }
     &.default-container.limitedwidth #page.drawers {
-        .main-inner {
-            max-width: 960px;
-            margin-left: auto;
-            margin-right: auto;
-        }
         .secondary-navigation {
             max-width: 960px;
             margin-left: auto;
             margin-right: auto;
         }
-
     }
     &.custom-container.limitedwidth #page.drawers {
         .main-inner {
