@@ -128,6 +128,10 @@ class core_renderer extends \theme_boost\output\core_renderer
             [
                 'text' => get_string('courses'),
                 'url' => (new moodle_url('/course/index.php'))->out(false)
+            ],
+            [
+                'text' => get_string('mycourses'),
+                'url' => (new moodle_url('/my/courses.php'))->out(false)
             ]
         ];
 
