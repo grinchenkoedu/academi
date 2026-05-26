@@ -8,7 +8,7 @@ jobs:
 
     services:
       mariadb:
-        image: mariadb:10.6
+        image: mariadb:10.6.18
         env:
           MYSQL_USER: 'root'
           MYSQL_ALLOW_EMPTY_PASSWORD: "true"
@@ -41,7 +41,7 @@ jobs:
 
       - name: Initialise moodle-plugin-ci
         run: |
-          composer create-project -n --no-dev --prefer-dist moodlehq/moodle-plugin-ci ci ^4
+          composer create-project -n --no-dev --prefer-dist moodlehq/moodle-plugin-ci ci ^4.5
           echo $(cd ci/bin; pwd) >> $GITHUB_PATH
           echo $(cd ci/vendor/bin; pwd) >> $GITHUB_PATH
           sudo locale-gen en_AU.UTF-8
