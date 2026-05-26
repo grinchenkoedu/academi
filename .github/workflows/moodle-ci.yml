@@ -8,7 +8,7 @@ jobs:
 
     services:
       mariadb:
-        image: mariadb:10
+        image: mariadb:10.6
         env:
           MYSQL_USER: 'root'
           MYSQL_ALLOW_EMPTY_PASSWORD: "true"
@@ -92,14 +92,20 @@ jobs:
           if [ -f moodle/.stylelintrc ]; then
             node -e "
               const fs = require('fs');
-              let content = fs.readFileSync('moodle/.stylelintrc', 'utf8');
-              content = content.replace(/#.*/g, '');
-              content = content.replace(/\/\/.*|\/\*[\s\S]*?\*\//g, '');
-              const data = eval('(' + content + ')');
-              data.rules = data.rules || {};
-              data.rules['declaration-no-important'] = null;
-              data.rules['no-unknown-animations'] = null;
-              fs.writeFileSync('moodle/.stylelintrc', JSON.stringify(data, null, 2));
+              const vm = require('vm');
+              try {
+                let content = fs.readFileSync('moodle/.stylelintrc', 'utf8');
+                content = content.replace(/#.*/g, '');
+                content = content.replace(/\/\/.*|\/\*[\s\S]*?\*\//g, '');
+                const data = vm.runInNewContext('(' + content + ')');
+                data.rules = data.rules || {};
+                data.rules['declaration-no-important'] = null;
+                data.rules['no-unknown-animations'] = null;
+                fs.writeFileSync('moodle/.stylelintrc', JSON.stringify(data, null, 2));
+              } catch (e) {
+                console.error('Failed to parse .stylelintrc:', e.message);
+                process.exit(1);
+              }
             "
           fi
 
