@@ -90,25 +90,8 @@ jobs:
         if: ${{ always() }}
         run: |
           if [ -f moodle/.stylelintrc ]; then
-            node -e "
-              const fs = require('fs');
-              try {
-                let content = fs.readFileSync('moodle/.stylelintrc', 'utf8');
-                // Safely remove the # comment on the at-rule-no-unknown line
-                content = content.replace(/#.*/g, '');
-                // Quote the JSON5 unquoted key
-                content = content.replace(/\bignore\s*:/g, '\"ignore\":');
-                // Parse safely using standard JSON.parse
-                const data = JSON.parse(content);
-                data.rules = data.rules || {};
-                data.rules['declaration-no-important'] = null;
-                data.rules['no-unknown-animations'] = null;
-                fs.writeFileSync('moodle/.stylelintrc', JSON.stringify(data, null, 2));
-              } catch (e) {
-                console.error('Failed to parse .stylelintrc:', e.message);
-                process.exit(1);
-              }
-            "
+            mv moodle/.stylelintrc moodle/.stylelintrc-core
+            echo '{"extends": "./.stylelintrc-core", "rules": {"declaration-no-important": null, "no-unknown-animations": null}}' > moodle/.stylelintrc
           fi
 
       - name: Grunt
