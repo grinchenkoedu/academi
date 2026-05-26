@@ -92,12 +92,14 @@ jobs:
           if [ -f moodle/.stylelintrc ]; then
             node -e "
               const fs = require('fs');
-              const vm = require('vm');
               try {
                 let content = fs.readFileSync('moodle/.stylelintrc', 'utf8');
+                // Safely remove the # comment on the at-rule-no-unknown line
                 content = content.replace(/#.*/g, '');
-                content = content.replace(/\/\/.*|\/\*[\s\S]*?\*\//g, '');
-                const data = vm.runInNewContext('(' + content + ')');
+                // Quote the JSON5 unquoted key
+                content = content.replace(/\bignore\s*:/g, '\"ignore\":');
+                // Parse safely using standard JSON.parse
+                const data = JSON.parse(content);
                 data.rules = data.rules || {};
                 data.rules['declaration-no-important'] = null;
                 data.rules['no-unknown-animations'] = null;
